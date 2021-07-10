@@ -31,8 +31,8 @@ scroll_threshold = 650
 
 border_thickness = 2
 
-keycheck = [1073741906, 1073741905, 1073741904, 1073741903, 13, 1073742049, 32, 27, 8]
-held = [False, False, False, False, False, False, False, False, False]
+keycheck = [1073741906, 1073741905, 1073741904, 1073741903, 13, 1073742049, 32, 27, 8, 9, 1073742048, 1073742052]
+held = [False, False, False, False, False, False, False, False, False, False, False, False]
 
 in_use = True
 
@@ -87,6 +87,20 @@ while in_use:
         if keys[pygame.K_RETURN] and not held[4]:
             print(f'Contents of line {line_sel + 1}: {lines[line_sel]}')
             lines[line_sel] = input(f'New contents of line {line_sel + 1}: ')
+        if keys[pygame.K_TAB] and not held[9]:
+            while True:
+                try:
+                    foo = int(input('Jump to line: '))
+                except ValueError:
+                    print('Invalid input!')
+                else:
+                    if foo < 0:
+                        line_sel = 0
+                    elif foo > len(lines) - 1:
+                        line_sel = len(lines) - 1
+                    else:
+                        line_sel = foo - 1
+                    break
         if keys[pygame.K_SPACE] and not held[6]:
             lines.insert(line_sel+1, '')
         if keys[pygame.K_BACKSPACE] and not held[8]:
@@ -100,8 +114,30 @@ while in_use:
             action = 'customization'
         if keys[pygame.K_ESCAPE] and not held[7]:
             dark_mode = not dark_mode
-
-
+        if keys[pygame.K_LCTRL] and not held[10]:
+            with open('output.txt', 'w', encoding='utf-8') as f:
+                for i, val in enumerate(lines):
+                    f.write(val + '\n')
+                print('Appended your current lines to output.txt')
+        if keys[pygame.K_RCTRL] and not held[11]:
+            while True:
+                a = input('Load file? All unsaved progress will be lost! (y/n): ').lower()
+                accepted_inputs = ['y', 'yes']
+                no_inputs = ['n', 'no']
+                if a in accepted_inputs:
+                    try:
+                        with open('output.txt', 'r', encoding='utf-8') as f:
+                            lines = []
+                            checks = [False for i in range(10)]
+                            lines = f.readlines()
+                            for i in lines:
+                                i = i.strip('\n')
+                            break
+                    except FileNotFoundError:
+                        print('No file named output.txt exists in this directory')
+                        break
+                elif a in no_inputs:
+                    break
 
 
 
