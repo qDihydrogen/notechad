@@ -1,40 +1,83 @@
 import pygame
-pygame.init()
+import time
+import math
+pygame.init()  # innit pygame haha bri'ish funy why am i making this program
 
+# WINDOW ---------------------------------------------------------------------
 width = 900
 height = 900
-window = pygame.display.set_mode((width, height))
-pygame.display.set_caption('notechad')
+window = pygame.display.set_mode((width, height))  # makes a 900x900 window
+pygame.display.set_caption('Notechad')
 
+# THIS THING ENSURES A 60FPS EXPERIENCE --------------------------------------
 clock = pygame.time.Clock()
 FPS = 60
 
+# TEXT -----------------------------------------------------------------------
 text = pygame.font.Font('font/dogicapixel.ttf', 14)
 foot = pygame.font.Font('font/dogicapixel.ttf', 36)
+back_color = (255, 255, 255)
+text_color = (0, 0, 0)
+foot_text = foot.render('Check the terminal!', True, text_color)
 
+# BASICALLY THE TEXT FILE ----------------------------------------------------
 lines = ['']
+
+# TOO ATTACHED I GUESS TO DELETE THIS LMAO
 # for i in range(10):
 #     lines.append(f'words words words #{i+1}')  # Filler. COMMENT OUT ONCE READY TO.
+
+# SELECTION, WILL USE LATER FOR MARKDOWN SUPPORT -----------------------------
 selection = [0, 0]
+
 action = 'scroll'
+
+# SELECTIONS, LINES AND OPTIONS ----------------------------------------------
 line_sel = 0
 opt_sel = 0
 
 dark_mode = False
 
+# CUSTOMIZATION --------------------------------------------------------------
 line_offset = 20
 left_offset = 50
 between_offset = 10
 top_offset = 10
-
 scroll_threshold = 650
-
 border_thickness = 2
 
+# KEYS -----------------------------------------------------------------------
 keycheck = [1073741906, 1073741905, 1073741904, 1073741903, 13, 1073742049, 32, 27, 8, 9, 1073742048, 1073742052]
 held = [False, False, False, False, False, False, False, False, False, False, False, False]
 
 in_use = True
+
+def formattime(time):
+    """
+    parameters:
+    float time (seconds)
+
+    returns a time in hours, minutes, and seconds rounded to seven decimal places through somewhat wet code
+    """
+    hour = str(math.floor(time / 3600))
+    minute = str(math.floor(time / 60) % 60)
+    second = str(time % 60)
+    if float(minute) < 10:
+        minute = '0' + minute
+    if float(second) < 10:
+        return hour + ':' + minute + ':' + f'0{float(second):.7f}'
+    else:
+        return hour + ':' + minute + ':' + f'{float(second):.7f}'
+
+def checkterminal():
+    """
+    parameters:
+    none
+
+    displays a message saying to check the terminal.
+    """
+    window.blit(foot_text, foot_text.get_rect(center=(width/2, scroll_threshold + 120)))
+    pygame.display.update()
 
 
 while in_use:
@@ -85,6 +128,7 @@ while in_use:
             if line_sel >= len(lines):
                 lines.append('')
         if keys[pygame.K_RETURN] and not held[4]:
+            checkterminal()
             print(f'Contents of line {line_sel + 1}: {lines[line_sel]}')
             lines[line_sel] = input(f'New contents of line {line_sel + 1}: ')
         if keys[pygame.K_TAB] and not held[9]:
@@ -115,16 +159,19 @@ while in_use:
         if keys[pygame.K_ESCAPE] and not held[7]:
             dark_mode = not dark_mode
         if keys[pygame.K_LCTRL] and not held[10]:
+            starttime = time.time()
             with open('output.txt', 'w', encoding='utf-8') as f:
                 for i, val in enumerate(lines):
                     f.write(val + '\n')
-                print('Appended your current lines to output.txt')
+                print(f'Appended your current lines to output.txt\nTime: {formattime(time.time()-starttime)}')
         if keys[pygame.K_RCTRL] and not held[11]:
+            checkterminal()
             while True:
                 a = input('Load file? All unsaved progress will be lost! (y/n): ').lower()
                 accepted_inputs = ['y', 'yes']
                 no_inputs = ['n', 'no']
                 if a in accepted_inputs:
+                    starttime = time.time()
                     try:
                         with open('output.txt', 'r', encoding='utf-8') as f:
                             lines = []
@@ -132,6 +179,9 @@ while in_use:
                             lines = f.readlines()
                             for i in lines:
                                 i = i.strip('\n')
+                            print(f'Loaded output.txt in {formattime(time.time()-starttime)}')
+                            if line_sel >= len(lines):
+                                line_sel = len(lines) - 1
                             break
                     except FileNotFoundError:
                         print('No file named output.txt exists in this directory')
