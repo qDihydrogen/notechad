@@ -36,7 +36,7 @@ you may now run the .py file through the terminal or by double-clicking in the f
 | ESCAPE | Toggles dark mode. Light mode is on by default. |
 | LEFT CTRL | Saves your lines and outputs them to a file output.txt. |
 | RIGHT CTRL | Loads from output.txt after given permission through user input. |
-| TAB | Create multiple lines. |
+| TAB | Jump to a line. |
 
 ## to do
 
