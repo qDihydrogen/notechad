@@ -82,7 +82,7 @@ def checkterminal():
 
 while in_use:
     for event in pygame.event.get():
-        if event.type == pygame.QUIT:
+        if event.type == pygame.QUIT:  # If hit X button, game closes
             in_use = False
 
     back_color = (255, 255, 255) if not dark_mode else (0, 0, 0)
@@ -102,11 +102,15 @@ while in_use:
                  text.render(f'length: {chars:,} ({chars/len(lines):,.3f} per line)', True, text_color)]
 
         for i, val in enumerate(lines):
+            y = line_offset*i+top_offset if line_offset*line_sel+top_offset <= scroll_threshold else line_offset*i+top_offset - (line_offset*line_sel+top_offset - scroll_threshold)
+            if y <= 0:
+                continue
             line_num = text.render(f'{i+1:,}', True, text_color)
             content = text.render(f'{val}', True, text_color)
-            y = line_offset*i+top_offset if line_offset*line_sel+top_offset <= scroll_threshold else line_offset*i+top_offset - (line_offset*line_sel+top_offset - scroll_threshold)
-            window.blit(line_num, line_num.get_rect(right=left_offset, top=y))
-            window.blit(content, content.get_rect(left=left_offset+between_offset, top=y))
+            if y <= scroll_threshold + line_num.get_rect().height:
+                window.blit(line_num, line_num.get_rect(right=left_offset, top=y))
+                window.blit(content, content.get_rect(left=left_offset+between_offset, top=y))
+            else: break
 
         line_arrow = text.render(f'< ({line_sel+1})', True, text_color)
         arrow_y = line_offset*line_sel+top_offset if line_offset*line_sel+top_offset <= scroll_threshold else line_offset*line_sel+top_offset - (line_offset*line_sel+top_offset - scroll_threshold)
@@ -174,12 +178,21 @@ while in_use:
                     starttime = time.time()
                     try:
                         with open('output.txt', 'r', encoding='utf-8') as f:
+                            print('Clearing document:    ', end='')
                             lines = []
-                            checks = [False for i in range(10)]
+                            curtime = [time.time()]
+                            print(f'{formattime(curtime[0]-starttime)}')
+                            print('Reading lines:        ', end='')
                             lines = f.readlines()
+                            curtime.append(time.time())
+                            print(f'{formattime(curtime[-1]-curtime[-2])}')
+                            print('Cleaning up lines:    ', end='')
                             for i in lines:
                                 i = i.strip('\n')
-                            print(f'Loaded output.txt in {formattime(time.time()-starttime)}')
+                            curtime.append(time.time())
+                            print(f'{formattime(curtime[-1]-curtime[-2])}')
+                            print('-' * 79)
+                            print(f'Loaded output.txt in  {formattime(time.time()-starttime)}')
                             if line_sel >= len(lines):
                                 line_sel = len(lines) - 1
                             break
@@ -251,4 +264,5 @@ while in_use:
 
     pygame.display.update()
     clock.tick(FPS)
-pygame.quit()
+
+pygame.quit()  # stops pygame
