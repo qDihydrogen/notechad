@@ -3,6 +3,9 @@ import time
 import math
 pygame.init()  # innit pygame haha bri'ish funy why am i making this program
 
+import cProfile
+import pstats
+
 # WINDOW ---------------------------------------------------------------------
 width = 900
 height = 900
@@ -81,6 +84,7 @@ def checkterminal():
 
 
 while in_use:
+    a = len(lines)  # this function takes time, best to store it in a variable to use for later
     for event in pygame.event.get():
         if event.type == pygame.QUIT:  # If hit X button, game closes
             in_use = False
@@ -95,22 +99,18 @@ while in_use:
     keys = pygame.key.get_pressed()
 
     if action == 'scroll':
-        chars = 0
-        for i in lines:
-            chars += len(i)
-        stats = [text.render(f'lines: {len(lines):,}', True, text_color),
-                 text.render(f'length: {chars:,} ({chars/len(lines):,.3f} per line)', True, text_color)]
+        stats = [text.render(f'lines: {a:,}', True, text_color)]
 
-        for i, val in enumerate(lines):
-            y = line_offset*i+top_offset if line_offset*line_sel+top_offset <= scroll_threshold else line_offset*i+top_offset - (line_offset*line_sel+top_offset - scroll_threshold)
-            if y <= 0:
-                continue
-            line_num = text.render(f'{i+1:,}', True, text_color)
-            content = text.render(f'{val}', True, text_color)
-            if y <= scroll_threshold + line_num.get_rect().height:
+        foo = line_offset*line_sel+top_offset - scroll_threshold if line_offset*line_sel+top_offset - scroll_threshold > 0 else 0
+        start = foo // line_offset
+        end = (foo + scroll_threshold) // line_offset if a - 1 > (foo + scroll_threshold) // line_offset else a - 1
+
+        for i in range(start, end + 1):
+                y = line_offset*i+top_offset if line_offset*line_sel+top_offset <= scroll_threshold else line_offset*i+top_offset - (line_offset*line_sel+top_offset - scroll_threshold)
+                line_num = text.render(f'{i+1:,}', True, text_color)
+                content = text.render(f'{lines[i]}', True, text_color)
                 window.blit(line_num, line_num.get_rect(right=left_offset, top=y))
                 window.blit(content, content.get_rect(left=left_offset+between_offset, top=y))
-            else: break
 
         line_arrow = text.render(f'< ({line_sel+1})', True, text_color)
         arrow_y = line_offset*line_sel+top_offset if line_offset*line_sel+top_offset <= scroll_threshold else line_offset*line_sel+top_offset - (line_offset*line_sel+top_offset - scroll_threshold)
@@ -129,7 +129,7 @@ while in_use:
                 line_sel = 0
         if keys[pygame.K_DOWN] and not held[1]:
             line_sel += 1
-            if line_sel >= len(lines):
+            if line_sel >= a:
                 lines.append('')
         if keys[pygame.K_RETURN] and not held[4]:
             checkterminal()
@@ -144,18 +144,18 @@ while in_use:
                 else:
                     if foo < 0:
                         line_sel = 0
-                    elif foo > len(lines) - 1:
-                        line_sel = len(lines) - 1
+                    elif foo > a - 1:
+                        line_sel = a - 1
                     else:
                         line_sel = foo - 1
                     break
         if keys[pygame.K_SPACE] and not held[6]:
             lines.insert(line_sel+1, '')
         if keys[pygame.K_BACKSPACE] and not held[8]:
-            if len(lines) > 1:
+            if a > 1:
                 lines.pop(line_sel)
-                if line_sel >= len(lines):
-                    line_sel = len(lines) - 1
+                if line_sel >= a:
+                    line_sel = a - 1
             else:
                 lines[0] = ''
         if keys[pygame.K_LSHIFT] and not held[5]:
@@ -171,10 +171,10 @@ while in_use:
         if keys[pygame.K_RCTRL] and not held[11]:
             checkterminal()
             while True:
-                a = input('Load file? All unsaved progress will be lost! (y/n): ').lower()
+                typing = input('Load file? All unsaved progress will be lost! (y/n): ').lower()
                 accepted_inputs = ['y', 'yes']
                 no_inputs = ['n', 'no']
-                if a in accepted_inputs:
+                if typing in accepted_inputs:
                     starttime = time.time()
                     try:
                         with open('output.txt', 'r', encoding='utf-8') as f:
@@ -193,8 +193,8 @@ while in_use:
                             print(f'{formattime(curtime[-1]-curtime[-2])}')
                             print('-' * 79)
                             print(f'Loaded output.txt in  {formattime(time.time()-starttime)}')
-                            if line_sel >= len(lines):
-                                line_sel = len(lines) - 1
+                            if line_sel >= a:
+                                line_sel = a - 1
                             break
                     except FileNotFoundError:
                         print('No file named output.txt exists in this directory')
@@ -218,7 +218,7 @@ while in_use:
                 text.render(f'{between_offset}', True, text_color),
                 text.render(f'{scroll_threshold}', True, text_color)]
 
-        for i in range(len(opts)):
+        for i in range(5):
             window.blit(opts[i], opts[i].get_rect(left=left_offset, top=line_offset*i+top_offset))
             window.blit(vals[i], vals[i].get_rect(right=width-left_offset, top=line_offset*i+top_offset))
             line_arrow = text.render(f'<', True, text_color)
@@ -227,7 +227,7 @@ while in_use:
         if keys[pygame.K_UP] and not held[0]:
             opt_sel -= 1 if opt_sel > 0 else 0
         if keys[pygame.K_DOWN] and not held[1]:
-            opt_sel += 1 if opt_sel < len(opts) - 1 else 0
+            opt_sel += 1 if opt_sel < 5 - 1 else 0
 
         # UGHHHHHH THIS IS SO WET
         if keys[pygame.K_LEFT]:
