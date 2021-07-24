@@ -3,9 +3,6 @@ import time
 import math
 pygame.init()  # innit pygame haha bri'ish funy why am i making this program
 
-import cProfile
-import pstats
-
 # WINDOW ---------------------------------------------------------------------
 width = 900
 height = 900
