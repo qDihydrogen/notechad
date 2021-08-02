@@ -1,14 +1,14 @@
-notechad is a free primitive text editor written in Python 3(.9) and Pygame.
+notechad is a ~~very good~~ free primitive text editor written in Python 3(.9) and Pygame.
 
 ## installation
 there are two ways to run notechad.
 ### .exe file
 running the .exe file should be all that is necessary. **THE EXECUTABLE MIGHT ONLY WORK ON WINDOWS 10.** the latest version of notechad can be found [here](https://github.com/qDihydrogen/notechad/releases)
 ### .py file
-to run the python file, you should have the most recent version of Python 3 ([download](https://python.org/downloads)). it is likely that some less recent versions of Python will work. do note that it will not work if you have a version of Python 3 that is below 3.5 as this program uses f-strings which were introduced in 3.5.
+to run the python file, you should have the [most recent version of Python 3](https://python.org/downloads). older versions of Python 3 can work should they be at earliest Python 3.6. else, it will not work.
 
 
-using pip in the terminal, you may now enter one of the following to install Pygame:
+using pip in the terminal, you may now enter one of the following to install Pygame (module for a graphical interface):
 
 `pip install pygame`
 
@@ -17,8 +17,6 @@ using pip in the terminal, you may now enter one of the following to install Pyg
 `python -m pip install pygame`
 
 `python3 -m pip install pygame`
-
-this is the library that notechad uses for graphics to show.
 
 you may now run the .py file through the terminal or by double-clicking in the file explorer.
 
@@ -29,14 +27,14 @@ you may now run the .py file through the terminal or by double-clicking in the f
 | DOWN | Same as up. |
 | LEFT | Used to change settings. |
 | RIGHT | Same as left. |
-| ENTER | Will allow people to change a specific line in the terminal. |
+| ENTER | Changes a line. |
 | LEFT SHIFT | Toggles between document and settings. |
 | SPACE | Creates new lines below the selected line. |
 | BACKSPACE | Deletes the selected line. |
 | ESCAPE | Toggles dark mode. Light mode is on by default. |
-| LEFT CTRL | Saves your lines and outputs them to a file output.txt. |
-| RIGHT CTRL | Loads from output.txt after given permission through user input. |
-| TAB | Jump to a line. |
+| LEFT CTRL | Saves your lines and ADDS them to a file output.txt (note that this will NOT overwrite what is already there) |
+| RIGHT CTRL | Loads from output.txt after given permission. |
+| TAB | Jump to a line. If out of range, will be put on the first or last line depending on input. |
 
 ## to do
 
@@ -45,9 +43,10 @@ you may now run the .py file through the terminal or by double-clicking in the f
  - markdown support
  - put an actual icon
  - comment the code
+ - allow commenting lines that do not show up on output.txt
 
 ## permissions
-kinda do whatever? just don't claim that notechad is yours and i'll most likely be fine.
+kinda do whatever? just don't claim that notechad is yours (but why would you claim this to be yours) and i'll most likely be fine.
 some things that you may do if you want include
  - translations
  - forks and other modifications
@@ -55,4 +54,4 @@ some things that you may do if you want include
  - make binaries for other OS's such as Mac OS X and Linux
 
 
-**Last updated on JULY 9, 2021.**
+**Last updated on AUGUST 2, 2021.**
