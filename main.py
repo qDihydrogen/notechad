@@ -155,6 +155,9 @@ while in_use:
                     line_sel = a - 1
             else:
                 lines[0] = ''
+
+            if line_sel >= len(lines):
+                line_sel = len(lines) - 1
         if keys[pygame.K_LSHIFT] and not held[5]:
             action = 'customization'
         if keys[pygame.K_ESCAPE] and not held[7]:
