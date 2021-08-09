@@ -32,7 +32,7 @@ you may now run the .py file through the terminal or by double-clicking in the f
 | SPACE | Creates new lines below the selected line. |
 | BACKSPACE | Deletes the selected line. |
 | ESCAPE | Toggles dark mode. Light mode is on by default. |
-| LEFT CTRL | Saves your lines and ADDS them to a file output.txt (note that this will NOT overwrite what is already there) |
+| LEFT CTRL | Saves your lines to output.txt. Whatever is in output.txt already will be lost. |
 | RIGHT CTRL | Loads from output.txt after given permission. |
 | TAB | Jump to a line. If out of range, will be put on the first or last line depending on input. |
 
@@ -54,4 +54,4 @@ some things that you may do if you want include
  - make binaries for other OS's such as Mac OS X and Linux
 
 
-**Last updated on AUGUST 2, 2021.**
+**Last updated on AUGUST 9, 2021.**
