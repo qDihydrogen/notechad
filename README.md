@@ -3,7 +3,7 @@ notechad is a ~~very good~~ free primitive text editor written in Python 3(.9) a
 ## installation
 there are two ways to run notechad.
 ### .exe file
-running the .exe file should be all that is necessary. **THE EXECUTABLE MIGHT ONLY WORK ON WINDOWS 10.** the latest version of notechad can be found [here](https://github.com/qDihydrogen/notechad/releases)
+running the .exe file should be all that is necessary (if on windows 10/11). the latest version of notechad can be found [here](https://github.com/qDihydrogen/notechad/releases)
 ### .py file
 to run the python file, you should have the [most recent version of Python 3](https://python.org/downloads). older versions of Python 3 can work should they be at earliest Python 3.6. else, it will not work.
 
