@@ -199,7 +199,7 @@ while in_use:
                     except FileNotFoundError:
                         print('No file named output.txt exists in this directory')
                         break
-                elif a in no_inputs:
+                elif typing in no_inputs:
                     break
 
 
